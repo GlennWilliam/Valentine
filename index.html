@@ -199,6 +199,7 @@
         // When "No" is clicked, update its text, increase Yes button size, and display multiple floating GIFs.
         function handleNoClick() {
             noClickCount++;
+            messageIndex++;
             let message = document.getElementById('errorMessage');
             if (noClickCount >= 3) {
                 message.textContent = "404 Error: Love Not Found. Please reconsider!";
