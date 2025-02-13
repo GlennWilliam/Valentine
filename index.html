@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Will You Be My Valentine?</title>
+    <!-- Google Font for a playful, handwritten look -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* Global Body Styles with a soft radial gradient */
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at top center, #ffe0e9, #ffccd5);
+            font-family: 'Pacifico', cursive;
+            overflow: hidden;
+            position: relative;
+        }
+        /* Main container styling */
+        .container {
+            z-index: 1;
+            position: relative;
+            text-align: center;
+            margin: 5% auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+        h1 {
+            color: #d6336c;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        /* Button Styles */
+        button {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.5em;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .yes-button {
+            background-color: #28a745;
+            color: #fff;
+            margin-right: 10px;
+        }
+        .yes-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #28a745;
+        }
+        .no-button {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .no-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #dc3545;
+        }
+        .gif_container {
+            margin-top: 20px;
+        }
+        .gif_container img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 15px;
+        }
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute;
+            color: #ff6b81;
+            animation: float 6s ease-in infinite;
+            font-size: 2em;
+            user-select: none;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        /* Floating GIF Prompt Styling */
+        .floating-gif-container {
+            position: fixed;
+            /* top and left will be set dynamically */
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #ff6b81;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            animation: floatIn 1s ease-out;
+            z-index: 100;
+            text-align: center;
+            max-width: 250px;
+        }
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .floating-gif-container img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .floating-gif-container p {
+            margin: 5px 0 0;
+            font-size: 1.2em;
+            color: #d6336c;
+        }
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            background: transparent;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Will you be my Valentine?</h1>
+        <div class="buttons">
+            <button class="yes-button" onclick="handleYesClick()">Yes</button>
+            <button class="no-button" onclick="handleNoClick()">No</button>
+        </div>
+        <div class="gif_container">
+            <img src="Ask.gif" alt="Cute GIF">
+        </div>
+    </div>
+
+    <!-- Container for floating hearts -->
+    <div id="floating-hearts"></div>
+
+    <script>
+        // Array of playful messages for the "No" button
+        const messages = [
+            "Wait, are you *really* sure?",
+            "Hmm... maybe take a deep breath first?",
+            "Oof, this is getting serious!",
+            "Okay, but what if I say *please* reconsider?",
+            "Oh no, my tiny heart can't handle this decision!",
+            "You're about to cross the point of no return... kinda!",
+            "Alright, but don’t say I didn’t warn you!",
+            "Eep! I’m hiding under a blanket now!"
+        ];
+        let messageIndex = 0;
+        let yesButtonSize = 1.5;
+    
+        // Array of GIF URLs
+        const gifUrls = [
+            "Angry1.gif",
+            "Angry2.gif",
+            "Angry3.gif",
+            "Angry4.gif",
+            "Angry5.gif",
+            "Angry6.gif",
+            "Angry7.gif",
+            "Angry8.gif",
+            "Angry9.gif",
+            "Angry10.gif",
+            "Angry11.gif",
+            "Angry12.gif",
+            "Angry13.gif",
+            "Angry14.gif",
+            "Angry15.gif",
+            "Angry16.gif",
+        ];
+    
+        // When "No" is clicked, update its text, increase Yes button size, and display multiple floating GIFs.
+        function handleNoClick() {
+            const noButton = document.querySelector('.no-button');
+            const yesButton = document.querySelector('.yes-button');
+    
+            // Get the current message and update the No button text
+            const currentMessage = messages[messageIndex % messages.length];
+            messageIndex++;
+    
+            // Increase the Yes button size
+            yesButtonSize *= 1.5;
+            yesButton.style.transform = `scale(${yesButtonSize})`;
+    
+            // Display five floating GIFs at different positions
+            displayMultipleFloatingGifs();
+        }
+    
+        // Redirect to the "Yes" page when "Yes" is clicked
+        function handleYesClick() {
+            window.location.href = "yes_page.html";
+        }
+    
+        // Display five different floating GIF prompts
+        function displayMultipleFloatingGifs() {
+            let usedIndexes = new Set();
+            for (let i = 0; i < 10; i++) {
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * gifUrls.length);
+                } while (usedIndexes.has(randomIndex));
+    
+                usedIndexes.add(randomIndex);
+                displayFloatingGif(messages[messageIndex % messages.length], gifUrls[randomIndex]);
+            }
+        }
+    
+        // Creates and displays a floating GIF prompt at a random position.
+        function displayFloatingGif(message, gifUrl) {
+            const floatingDiv = document.createElement("div");
+            floatingDiv.className = "floating-gif-container";
+    
+            // Set a random position (ensure values between 10% and 80% so it's visible)
+            floatingDiv.style.top = Math.floor(Math.random() * 70) + 10 + "%";
+            floatingDiv.style.left = Math.floor(Math.random() * 70) + 10 + "%";
+    
+            // Create a close button (×)
+            const closeBtn = document.createElement("button");
+            closeBtn.textContent = "×";
+            closeBtn.className = "close-btn";
+            closeBtn.onclick = function () {
+                floatingDiv.remove();
+            };
+    
+            // Create an image element for the floating GIF
+            const gifImg = document.createElement("img");
+            gifImg.src = gifUrl;
+            gifImg.alt = "Cute Floating GIF";
+    
+            // Create a paragraph to display the message
+            const msgText = document.createElement("p");
+            msgText.textContent = message;
+    
+            // Append elements to the floating container
+            floatingDiv.appendChild(closeBtn);
+            floatingDiv.appendChild(gifImg);
+            floatingDiv.appendChild(msgText);
+    
+            // Append the floating container to the body
+            document.body.appendChild(floatingDiv);
+        }
+    </script>
+</body>
+</html>

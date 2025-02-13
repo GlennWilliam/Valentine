@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Knew You Would Say Yes!</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* Global styling with a soft radial gradient */
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at bottom center, #ffe0e9, #ffccd5);
+            font-family: 'Pacifico', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        /* Container for the celebration message */
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            text-align: center;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+        .header_text {
+            font-size: 3em;
+            color: #d6336c;
+            margin-bottom: 20px;
+        }
+        .gif_container img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 15px;
+        }
+        /* Floating Hearts (same as in index.html) */
+        .heart {
+            position: absolute;
+            color: #ff6b81;
+            animation: float 6s ease-in infinite;
+            font-size: 2em;
+            user-select: none;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header_text">No surprises here—I knew you’d agree!</h1>
+        <div class="gif_container">
+            <img src="Yes.gif" alt="Celebration GIF">
+        </div>
+    </div>
+
+    <!-- Floating hearts for extra celebration -->
+    <div id="floating-hearts"></div>
+    <script>
+        // Create floating hearts at random positions
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            heart.style.fontSize = (Math.random() * 1.5 + 1) + 'em';
+            document.body.appendChild(heart);
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+        setInterval(createHeart, 100);
+    </script>
+</body>
+</html>
