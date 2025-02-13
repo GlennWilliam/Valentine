@@ -71,24 +71,25 @@
             max-width: 400px;
             border-radius: 15px;
         }
-        /* Floating Hearts Animation */
+        /* Heart explosion styling */
         .heart {
             position: absolute;
-            color: #ff6b81;
-            animation: float 6s ease-in infinite;
+            color: red;
             font-size: 2em;
-            user-select: none;
+            animation: explode 1.5s ease-out forwards;
+            opacity: 0;
+            z-index: 100;
         }
-        @keyframes float {
+        @keyframes explode {
             0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            50% {
+                transform: translate(0, 0) scale(1);
                 opacity: 1;
             }
+            50% {
+                opacity: 0.8;
+            }
             100% {
-                transform: translateY(-10vh) rotate(360deg);
+                transform: translate(calc(100vw * (random() - 0.5)), calc(100vh * (random() - 0.5))) scale(0);
                 opacity: 0;
             }
         }
@@ -141,7 +142,7 @@
     <div class="container">
         <h1>Will you be my Valentine?</h1>
         <div class="buttons">
-            <button class="yes-button" onclick="handleYesClick()">Yes</button>
+            <button class="yes-button" onclick="handleYesClick(event)">Yes</button>
             <button class="no-button" onclick="handleNoClick()">No</button>
         </div>
         <div class="gif_container">
@@ -205,8 +206,11 @@
         }
     
         // Redirect to the "Yes" page when "Yes" is clicked
-        function handleYesClick() {
+        function handleYesClick(event) {
+            createHeartExplosion(event.clientX, event.clientY);
+            setTimeout(() => {
             window.location.href = "yes_page.html";
+            }, 2000);
         }
     
         // Display five different floating GIF prompts
@@ -256,6 +260,26 @@
     
             // Append the floating container to the body
             document.body.appendChild(floatingDiv);
+        }
+
+        function createHeartExplosion(x, y) {
+            for (let i = 0; i < 100; i++) {
+                let heart = document.createElement("div");
+                heart.className = "heart";
+                heart.innerHTML = "❤️";
+                document.body.appendChild(heart);
+                
+                let randomX = (Math.random() - 0.5) * 400;
+                let randomY = (Math.random() - 0.5) * 400;
+                let duration = Math.random() * 1.5 + 0.5;
+                
+                heart.style.left = `${x}px`;
+                heart.style.top = `${y}px`;
+                heart.style.transform = `translate(${randomX}px, ${randomY}px) scale(${Math.random() * 1.5})`;
+                heart.style.animation = `explode ${duration}s ease-out forwards`;
+                
+                setTimeout(() => heart.remove(), duration * 3000);
+            }
         }
     </script>
 </body>
