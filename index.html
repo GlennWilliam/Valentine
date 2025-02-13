@@ -136,6 +136,13 @@
             cursor: pointer;
             color: #dc3545;
         }
+        .message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #d6336c;
+            font-weight: bold;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +152,7 @@
             <button class="yes-button" onclick="handleYesClick(event)">Yes</button>
             <button class="no-button" onclick="handleNoClick()">No</button>
         </div>
+        <p class="message" id="errorMessage"></p>
         <div class="gif_container">
             <img src="Ask.gif" alt="Cute GIF">
         </div>
@@ -166,7 +174,7 @@
             "Eep! I’m hiding under a blanket now!"
         ];
         let messageIndex = 0;
-        let yesButtonSize = 1.5;
+        let noClickCount = 0;
     
         // Array of GIF URLs
         const gifUrls = [
@@ -190,16 +198,17 @@
     
         // When "No" is clicked, update its text, increase Yes button size, and display multiple floating GIFs.
         function handleNoClick() {
-            const noButton = document.querySelector('.no-button');
-            const yesButton = document.querySelector('.yes-button');
-    
-            // Get the current message and update the No button text
-            const currentMessage = messages[messageIndex % messages.length];
-            messageIndex++;
-    
-            // Increase the Yes button size
-            yesButtonSize *= 1.5;
-            yesButton.style.transform = `scale(${yesButtonSize})`;
+            noClickCount++;
+            let message = document.getElementById('errorMessage');
+            if (noClickCount >= 3) {
+                message.textContent = "404 Error: Love Not Found. Please reconsider!";
+                message.style.display = "block";
+            }
+            if (noClickCount >= 5) {
+                let noButton = document.querySelector('.no-button');
+                noButton.textContent = "Okay, fine! I have to force you to say Yes, you pig!!!";
+                noButton.onclick = handleYesClick;
+            }
     
             // Display five floating GIFs at different positions
             displayMultipleFloatingGifs();
@@ -216,7 +225,7 @@
         // Display five different floating GIF prompts
         function displayMultipleFloatingGifs() {
             let usedIndexes = new Set();
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 3; i++) {
                 let randomIndex;
                 do {
                     randomIndex = Math.floor(Math.random() * gifUrls.length);
